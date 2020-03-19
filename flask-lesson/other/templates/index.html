@@ -1,0 +1,9 @@
+{% extends "layout.html" %} {% block heading %} Home page {% endblock %} {% block body %}
+<ul>
+  {% for name in names %}
+  <li>{{ name }}</li>
+  {% endfor %}
+  <!-- 'more' ==> function name -->
+  <a href="{{ url_for('more') }}">Read more...</a>
+</ul>
+{% endblock %}

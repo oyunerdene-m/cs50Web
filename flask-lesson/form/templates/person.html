@@ -1,0 +1,4 @@
+{% extends "layout.html" %} {% block heading %} Person name: {% endblock %} {% block body %}
+<h3>Hello, {{ name }}</h3>
+<a href="{{ url_for('index') }}">Home</a>
+{% endblock %}
