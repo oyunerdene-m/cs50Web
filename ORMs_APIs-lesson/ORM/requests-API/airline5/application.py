@@ -61,7 +61,7 @@ def more(flight_id):
 def flight_api(flight_id):
     flight = Flight.query.get(flight_id)
     if not flight:
-        return jsonify({"error": "Invalid flight id."})
+        return jsonify({"error": "Invalid flight id."}), 422
 
     passengers = flight.passengers
     names = []
