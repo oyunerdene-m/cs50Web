@@ -11,11 +11,13 @@ Books
 
     <ul>
       {% for book in books %}
-        <li><a href="">{{ book.title }}</a></li>
-        <span>by {{ book.author }}, published: {{ book.year }}</span>
-      
+        <li>
+          <a href="{{ url_for('more', book_id=book.id) }}">{{ book.title }}</a> </br>
+          <span>ID: {{ book.id }}, by {{ book.author }}, published: {{ book.year }}</span>
+        </li>    
       {% endfor %}  
     </ul>
   </div>
 </div>
 {% endblock %}
+

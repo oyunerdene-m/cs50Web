@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}
+More
+{% endblock %}
+
+{% block body %}
+<div class="row" style="padding-top: 60px;">
+  <div class="col-md-6">
+    <h1 style="margin-bottom: 30px;">{{ book.title }}</h1>
+    <p>Author: {{ book.author }}</p>
+    <p>Published year: {{ book.year }}</p>
+    <p>(ISBN: {{ book.isbn }})</p>   
+  </div>
+  <div style="background-color: beige; padding: 20px 30px;" class="col-md-6">
+    <h4>Friend Reviews</h4>
+    <ul>
+      {% for review in reviews %}
+        <li>
+          
+          <div style="display: flex; justify-content: space-between;">
+            <span>by {{review.user.name}}</span>
+            <span>{{ review.createdAt }}</span>
+          </div>
+          <h6>Rating: {{ review.rating }}</h6>    
+
+          <p>{{ review.content }}</p>
+          <hr/>
+
+        </li>
+      {% endfor %}
+    </ul>
+
+    <form action="{{ url_for('add_review', book_id=book.id ) }}">
+        <button class="btn btn-success">Write a review</button>
+    </form>
+  </div>  
+  
+</div>
+{% endblock %}
+
+

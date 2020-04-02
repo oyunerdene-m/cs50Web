@@ -1,6 +1,7 @@
 import os
+import datetime
 
-from flask import Flask, jsonify, redirect, render_template, request, session
+from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from flask_session import Session
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -10,7 +11,7 @@ from models import *
 app = Flask(__name__)
 
 # Check for environment variable
-if not "postgresql:///bookApp":
+if not "postgresql:///books":
     raise RuntimeError("DATABASE_URL is not set")
 
 # Configure session to use filesystem
@@ -94,6 +95,53 @@ def search():
                                         Book.author.like('%' + search +'%'))).all()
    
     return render_template("books.html", books=found_books)
+
+
+@app.route("/books/<int:book_id>")
+def more(book_id):
+    book = Book.query.get(book_id)
+    reviews = Review.query.filter_by(book_id=book_id).all()
+    #reviews = book.reviews
+
+    return render_template("more.html", book=book, reviews=reviews)
+
+@app.route("/review/new/<int:book_id>", methods=["GET", "POST"])
+def add_review(book_id):
+    if request.method == "GET":
+        book = Book.query.get(book_id)
+        return render_template("new.html", book=book) 
+    else:
+        book = Book.query.get(book_id)
+        content = request.form.get("content")
+        rating = int(request.form.get("rating"))
+        current_time = datetime.now() 
+        day = current_time.strftime("%Y-%m-%d (%H:%M:%S)")
+        user_id = session["user_id"]
+        
+        review = Review(content=content, createdAt=day, rating=rating, user_id=user_id, book_id=book_id)
+        db.session.add(review)
+        db.session.commit()
+
+        
+        return redirect(url_for('more', book_id=book_id))
+
+
+        
+
+
+        
+
+
+
+
+
+
+
+
+
+    
+
+
 
 
 
