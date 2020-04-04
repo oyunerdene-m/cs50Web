@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, render_template, request
 from models import *
+from goodreadsapi import *
 
 app = Flask(__name__)
 
@@ -48,6 +49,7 @@ def flights():
 @app.route("/flights/<int:flight_id>")
 def more(flight_id):
     flight = Flight.query.get(flight_id)
+    print(aoi_book)
     if flight is None:
         return render_template("error.html", message="Flight doesn't exist.")
 
@@ -55,7 +57,9 @@ def more(flight_id):
     #passengers = Passenger.query.filter_by(flight_id=flight_id).all()
     # after set relations in models.py Flight class:
     passengers = flight.passengers
-    return render_template("more.html", flight=flight, passengers=passengers)
+    
+
+print(goodreadsapi.result)
     
     
         

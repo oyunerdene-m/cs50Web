@@ -23,7 +23,7 @@
   
           {% if session.user_id %}
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="#">Hello {{ session['username'] }}</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
@@ -44,6 +44,12 @@
   </div>
   
   <div class="container">
+    {% if get_flashed_messages() %}
+        <div class="alert alert-primary border text-center" role="alert">
+            {{ get_flashed_messages() | join(" ") }}
+        </div>
+    {% endif %}
+
     {% block body %}
     {% endblock %}
   </div>

@@ -1,13 +1,17 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Error
+ / Error
 {% endblock %}
 
 {% block body %}
-  <div class="alert alert-danger" role="alert">
+  <div class="text-center alert alert-danger" role="alert">
     {{ message }}
-  </div>
-     <!-- <a href="{{ url_for('login') }}">Try again!</a> -->
-  <a href="{{ url_for('register') }}">Try again!</a>
+  </div>  
+    {% if isRegistered %}
+      <a href="{{ url_for('login') }}">Try again!</a>
+    {% else %}
+      <a href="{{ url_for('register') }}">Try again!</a>
+    {% endif %}
+
 {% endblock %}
