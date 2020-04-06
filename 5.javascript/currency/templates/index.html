@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        document.querySelector("#form").onsubmit = () => {  
+
+          // Initialize new request
+          const request = new XMLHttpRequest();
+          const currency = document.querySelector("#currency").value;
+          request.open('POST', '/convert');
+          console.log(request)
+
+          // When the request is done loaded
+          request.onload = () => {
+            
+            // Extraxt json data from request 
+            const data = JSON.parse(request.responseText)
+
+            console.log(data)
+            if(data.success){
+              const contents = `1 EUR equals to ${data.rate} ${currency}.`
+              document.querySelector("#result").innerHTML = contents;
+            } else {
+              document.querySelector("#result").innerHTML = "There was an error!";
+            }          
+          }
+
+          const data = new FormData();
+          data.append("currency", currency)
+          
+          request.send(data);
+          return false;
+        };
+    });
+  </script>
+</head>
+<body>
+  <h1>Currency converter</h1>
+  <form id="form">
+    <input id="currency" type="text" autofocus autocomplete="off" placeholder="Currency">
+    <input type="submit" value="Submit">
+  </form>
+
+  <div style="margin-top: 20px;" id="result">
+    
+  </div>
+
+</body>
+</html>

@@ -6,7 +6,7 @@ def main():
   other = input("Other currency: ")
 
   #"http://data.fixer.io/api/latest?access_key=apikey&base=EUR&symbols=USD"
-  res = requests.get("http://data.fixer.io/api/latest", params={"access_key": apikey, "base": base, "symbols": other})
+  res = requests.get("http://data.fixer.io/api/latest", params={"access_key": "6ecf162da9b29cd2507bb70fb5fd6295", "base": base, "symbols": other})
   if res.status_code != 200:
     raise Exception("ERROR: API request unsuccessful.")
   data = res.json()
