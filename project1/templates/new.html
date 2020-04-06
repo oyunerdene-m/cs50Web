@@ -60,12 +60,23 @@ Add new review
 <script>
   stars = document.getElementsByClassName("fa-star")
   for(let i=0; i<stars.length; i++){
-    stars[i].onclick = function(){
-       this.style.color = "green"
-    
+
+  document.addEventListener("DOMContentLoaded", function(){
+      stars[i].onclick = change;
+ 
+  });
+
+  function change(){
+    for(let j=0; j<=i; j++){
+      stars[j].style.color = "green";
     }
-  
   }
+}
+  
+
+
+    
+ 
   
 </script>
 
