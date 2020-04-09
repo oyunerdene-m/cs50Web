@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      load_page('first');
+
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.onclick = () => {
+          event.preventDefault()
+          load_page(link.dataset.page)
+        }
+      });
+    });
+
+    function load_page(name){
+      const request = new XMLHttpRequest();
+      request.open('GET', `/${name}`);
+      
+      request.onload = () => {
+        response = request.responseText;
+        document.querySelector("#content").innerHTML = response;
+      }
+      request.send();
+
+    }
+  </script>
+  <title>single Page</title>
+</head>
+<body>
+  <ul>
+    <li><a href="" class="nav-link"  data-page="first">First page</a></li>
+    <li><a href="" class="nav-link" data-page="second">Second page</a></li>
+    <li><a href="" class="nav-link" data-page="third">Third page</a></li>
+  </ul>
+
+  <div id="content"></div>
+  
+</body>
+</html>
