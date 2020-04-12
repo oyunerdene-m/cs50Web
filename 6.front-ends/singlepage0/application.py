@@ -7,9 +7,9 @@ def index():
   return render_template("index.html")
 
 texts = [
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+  "first: Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+  "second: Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.",
+  "third: The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested."
 ]
 
 @app.route("/first")
@@ -19,6 +19,7 @@ def first():
 @app.route("/second")
 def second():
   return texts[1]
+
 
 @app.route("/third")
 def third():

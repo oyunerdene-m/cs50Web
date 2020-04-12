@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .post {
+      background-color: bisque;
+      padding: 10px 20px;
+      margin-bottom: 10px;
+    }
+
+    .hide {
+      float: right;
+      cursor: pointer;
+    }
+  </style>
+
+  <script>
+    // Start with first post.
+    let counter = 1;
+    // Load posts 20 at a time.
+    const quantity = 20;
+
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // When DOM loads, render the first 20 posts.
+      load();
+      // document.querySelectorAll('.hide').forEach(hide => {
+      //   hide.onclick = () => {
+      //     event.preventDefault();
+      //     hide.parentElement.remove();
+      //   };
+      // });
+    });
+     
+    // If scrolled to bottom, load the next 20 posts.
+    window.onscroll = () => {
+      if(window.innerHeight + window.scrollY >= document.body.offsetHeight){
+        load();
+      }
+    };
+
+    // Load next set of posts.
+    function load(){
+
+      // Set start and end post numbers, and update counter.
+      const start = counter;
+      const end = start + quantity - 1;
+      counter = end + 1;
+
+      // Open new request to get new posts.
+      const request = new XMLHttpRequest();
+      request.open('POST', '/posts');
+      request.onload = () => {        
+        const response = JSON.parse(request.responseText);
+        response.forEach(data => {
+          add_post(data);
+        });
+      };
+
+      // Add start and end points to request data.
+      const data = new FormData()
+      data.append('start', start)
+      data.append('end', end)
+
+      // Send request.
+      request.send(data);
+    }
+     
+    // Add a new post with given contents to DOM.
+    function add_post(contents){
+      // Create new post.
+      const post = document.createElement('div');
+      post.className = 'post';
+      post.innerHTML = contents;
+
+      // Add hide button to post.
+      const hide = document.createElement('button');
+      hide.className = 'hide';
+      hide.innerHTML  = 'hide';
+      post.append(hide);
+
+      // When hide button is clicked, remove post.
+      hide.onclick = function(){
+        this.parentElement.remove();
+      }
+
+      // Add post to DOM.
+      document.querySelector('#posts').append(post);   
+    }
+  </script>
+
+  <title>Posts0</title>
+</head>
+<body>
+    <div id="posts">
+    </div>
+</body>
+</html>

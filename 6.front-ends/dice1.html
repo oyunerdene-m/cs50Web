@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dice1</title>
+  <style>
+    img {
+      width: 30px;
+      height: 30px;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+  <script id="result" type="text/template">
+    <li>
+      You rolled: 
+      {{#each rolls}}
+        <img src="img/{{ this }}.png" alt="" title="{{ this }}"/>
+      {{/each}}   
+      (Total: {{ sum }})  
+    </li>
+  </script>
+  <script>
+    const template = Handlebars.compile(document.querySelector('#result').innerHTML);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelector('button').onclick = () => {
+        const number = document.querySelector('#input').value;
+
+        let rolls = [];
+        let sum = 0;
+        for(let i=0; i<number; i++){
+          let random = Math.floor((Math.random() * 6) + 1);
+          rolls.push(random);
+          sum += random;
+        }
+        console.log(rolls, sum);
+
+        const content = template({'rolls': rolls, 'sum': sum});
+
+        document.querySelector('#rolls').innerHTML += content;
+      };
+    });
+    
+  </script>
+</head>
+<body>
+  <input type="number" min="1" id="input">
+  <button>click here</button>
+  <ul id="rolls">
+  </ul>
+  
+</body>
+</html>

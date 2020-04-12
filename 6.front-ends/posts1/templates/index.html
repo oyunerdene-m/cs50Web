@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+  <script id="result" type="text/template">
+    <div class='post'>
+        {{ post }}
+    </div>
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", load);
+
+    function load(){
+      const request = new XMLHttpRequest();
+      request.open('POST', '/posts');
+      request.onload = () => {
+        const response = JSON.parse(request.responseText);
+
+    };
+    // const data = new FormData();
+    // data.append('start', start);
+    // data.append('end', end);
+    // request.send(data)
+      request.send();
+    }  
+  </script>
+
+</head>
+<body>
+  <h1>Posts:</h1>
+  <div class="posts">
+  </div>
+</body>
+</html>

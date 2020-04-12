@@ -3,41 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
 
+      // Start by loading first page.
       load_page('first');
 
-      document.querySelectorAll('.nav-link').forEach(link => {
+      // Set links up to load new pages.
+      document.querySelectorAll(".link").forEach(link => {
         link.onclick = () => {
-          event.preventDefault()
-          load_page(link.dataset.page)
+          load_page(link.dataset.page);
+          return false;
         }
       });
+
     });
 
-    function load_page(name){
+    // Update text on popping state /press on back button/
+    window.onpopstate = (e) => {
+      const data = e.state;
+      //console.log(data)
+      document.title = data.title;
+      document.querySelector(".content").innerHTML = data.text
+    }
+   
+   // Renders contents of new page in main view.
+   function load_page(name){
       const request = new XMLHttpRequest();
       request.open('GET', `/${name}`);
-      
       request.onload = () => {
-        response = request.responseText;
-        document.querySelector("#content").innerHTML = response;
-      }
-      request.send();
+        const response = request.responseText
+        document.querySelector(".content").innerHTML = response;
 
-    }
+        //Push state to URL
+        document.title = name;
+        //Update the URL tha we currently we on
+        history.pushState({'title': name, 'text': response}, name, name)
+        //history.pushState - how we manipulate HTML5 history
+        //null - any data that I want associated with me pushing this URL
+        //name - title of the page we trying to push
+        //name - URL that we push
+      }
+    request.send();    
+   }
+   
   </script>
-  <title>single Page</title>
+
+  <title>Single Page</title>
 </head>
 <body>
   <ul>
-    <li><a href="" class="nav-link"  data-page="first">First page</a></li>
-    <li><a href="" class="nav-link" data-page="second">Second page</a></li>
-    <li><a href="" class="nav-link" data-page="third">Third page</a></li>
+    <li><a href="" class="link" data-page="first">First page</a></li>
+    <li><a href="" class="link" data-page="second">Second page</a></li>
+    <li><a href="" class="link" data-page="third">Third page</a></li>
   </ul>
 
-  <div id="content"></div>
-  
+  <div class="content"></div>
 </body>
 </html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Posts2</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+  <style>
+    .post {
+      background-color: greenyellow;
+      margin-bottom: 5px;
+      padding: 5px 10px;
+    }
+    #hide {
+      float: right;
+      cursor: pointer;
+    }
+  </style>
+  <script id="post" type="text/x-handlebars-template">
+    <div class='post'>
+      {% raw -%}
+        {{ contents }}
+      {%- endraw %}
+     <button id='hide'>hide</button>
+    </div>
+  </script>
+  <script>
+    // Start with first post.
+    let counter = 1;
+     // Load posts 25 at a time.
+    const quantity = 25;
+
+    // When DOM loads, render the first 25 posts.
+    document.addEventListener("DOMContentLoaded", () => {
+      load();
+    });
+
+    // If scrolled to bottom, load the next 25 posts.
+    document.onscroll = () => {
+      if(window.innerHeight + window.scrollY >= document.body.offsetHeight){
+        load();
+      }
+    };
+
+    // If hide button is clicked, delete the post.
+    document.addEventListener("click", (e) => {
+      const element = e.target;
+      if(element.id === 'hide'){
+        element.parentElement.remove();
+      }
+    });
+
+    // Load next set of posts.
+    function load(){
+      // Set start and end post numbers, and update counter.
+      let start = counter;
+      let end = start + quantity - 1;
+      counter = end + 1;
+
+      // Open new request to get new posts.
+      const request = new XMLHttpRequest();
+      request.open('POST', '/posts');
+      request.onload = () => {
+        const response = JSON.parse(request.responseText);
+        response.forEach(add_post);
+      }
+
+      // Add start and end points to request data.
+      const data = new FormData();
+      data.append('start', start);
+      data.append('end', end);
+
+      // Send request.
+      request.send(data);
+    }
+
+    // Add a new post with given contents to DOM.
+    const template = Handlebars.compile(document.querySelector('#post').innerHTML);
+    function add_post(text){
+      // Create new post.
+      const post = template({'contents': text});
+
+      // Add post to DOM.
+      document.querySelector('#posts').innerHTML += post;
+    }
+  </script>
+</head>
+<body>
+  <div id="posts">
+  </div> 
+</body>
+</html>

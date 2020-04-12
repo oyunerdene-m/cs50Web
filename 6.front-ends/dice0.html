@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RollDice</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+  <script id="body" type="text/x-handlebars-template">
+    <li>
+      You rolled: 
+      {{#each rolls}}
+        <img title="{{ this }}" src='img/{{ this }}.png'/> 
+      {{/each}}
+      (Total: {{ sum }})
+  </li>
+  </script>
+
+  <script>
+    const template = Handlebars.compile(document.querySelector('#body').innerHTML);
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelector('button').onclick = () => {  
+        event.preventDefault();
+        
+        const number = Number(document.querySelector('input').value);
+        const rolls = [];
+        let sum = 0;
+        for(let i=0; i<number; i++){
+          const roll = Math.floor((Math.random() * 6) + 1);
+          rolls.push(roll);
+          sum += roll;
+        }
+               
+        //Content of adding to the DOM, template is function that is going to take arguments,
+        //that define what to plug into template and give back HTML content that actually care about
+        const content = template({'rolls': rolls, 'sum': sum});
+        
+        document.querySelector('#result').innerHTML += content;
+      };
+      
+    });
+  </script>
+</head>
+<body>
+  <input type="number" id="input" value="1" placeholder="Number of rolls" min="1">
+  <button>Roll</button>
+  <ul id="result">
+    
+  </ul>
+</body>
+</html>
