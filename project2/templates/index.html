@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% block title %} Home {% endblock %}
+{% block body %}
+
+<div class="row">
+  <div style="background-color: #c1f1fc; height: 700px;" class="col-md-3">
+    <ul id="users-list">
+    </ul>
+
+  </div>
+  <div class="col-md-9">
+    <div id="current_user">
+
+    </div>
+    </div>
+</div>
+<script>
+    const request = new XMLHttpRequest();
+    request.open("GET", "/get_names")
+    request.onload = () => {
+      const data = JSON.parse(request.responseText);
+        data.forEach(d => {
+        const li = document.createElement('li');
+          li.innerHTML = `${d} is connected!`;
+          document.querySelector('#users-list').append(li);
+         })
+    }
+    request.send();
+    // Connect to websocket
+    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+    socket.on('connect', () => {       
+      socket.emit('announce');
+      // When a new vote is announced, add to the unordered list
+      socket.on('announce names', data => {
+        // data["names"].forEach(d => {
+          const li = document.createElement('li');
+          li.innerHTML = `${data['username']} is connected!`;
+          document.querySelector('#users-list').append(li);
+        // })
+      })
+        
+    const name = localStorage.getItem('currentUserName');
+    if(!name){
+      document.location.href = "/login";
+    } else {
+      document.querySelector('#current_user').innerHTML = "Hello " + name + "!"
+    }      
+});  
+</script>
+{% endblock %}

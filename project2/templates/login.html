@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block title %} Display name {% endblock %}
+{% block body %}
+  <ul id="current_names"></ul>
+ 
+  <form style="margin-top: 80px;" id="add_name">
+    <div class="form-group">
+      <label for="display_name">Log into Flack App</label>
+      <input required type="text" class="form-control" id="display_name" placeholder="Enter Your Name">
+    </div>        
+    <button id="button" type="submit" class="btn btn-info">Submit</button>
+  </form>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if(localStorage.getItem('currentUserName')){
+        alert("You already logged in!")
+        document.location.href = "/";
+      }
+      
+      // Connect to websocket
+      var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+      // When connected, configure form
+      socket.on('connect', () => {
+
+          // Submit form should emit a "add name" event
+        document.querySelector('#add_name').onsubmit = (event) => {
+            event.preventDefault();
+            const username = document.querySelector('#display_name').value;
+            localStorage.setItem('currentUserName', username);
+            socket.emit('add name', {'username': username});
+            document.location.href = "/";
+          };
+        });
+     
+    });
+  </script>
+ 
+{% endblock %}
+  
