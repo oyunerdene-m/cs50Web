@@ -28,8 +28,14 @@
             event.preventDefault();
             const username = document.querySelector('#display_name').value;
             localStorage.setItem('currentUserName', username);
-            socket.emit('add name', {'username': username});
-            document.location.href = "/";
+            socket.emit('add name', {'username': username}, (data) => {
+              if(data){
+                alert(data);
+              } else {
+                document.location.href = "/";
+              }
+            });
+
           };
         });
      

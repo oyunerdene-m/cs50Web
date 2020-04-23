@@ -149,8 +149,6 @@ def more(book_id):
 def add_review(book_id):
     user_id = session["user_id"]
     
-    
-
     if request.method == "GET":
         reviews = Review.query.filter(and_(Review.user_id==user_id, Review.book_id==book_id)).all()
 

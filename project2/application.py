@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
-names = []
+names = ["oyuka"]
 
 @app.route("/")
 def index():
@@ -21,12 +21,14 @@ def login():
 
 @app.route("/get_names")
 def get_names():
-  print(names)
   return jsonify(names)
 
 @socketio.on("add name")
 def add(data):
     username = data["username"]
+    print(names)
+    if username in names:
+      return "That name is already registered!"
     names.append(username)
     emit("announce names", {"username": username}, broadcast=True)  
 
